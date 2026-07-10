@@ -1,6 +1,15 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from .managers import CustomUserManager
+from django.contrib.auth.models import AbstractUser
+from django.db import models
+
+class CustomUser(AbstractUser):
+    # Добавляем поле birthdate (может быть пустым, если юзер не указал сразу)
+    birthdate = models.DateField(null=True, blank=True, verbose_name="Дата рождения")
+
+    def __str__(self):
+        return self.username
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True, max_length=255, verbose_name='Email')
