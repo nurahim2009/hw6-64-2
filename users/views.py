@@ -1,3 +1,4 @@
+from users.permissions import IsModerator
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -25,3 +26,10 @@ class LoginView(APIView):
         if serializer.is_valid():
             return Response({"message": "Успешный вход", "email": serializer.validated_data['user'].email}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class ProductViewSet(ModelViewSet): # имя вашего класса может отличаться
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    
+    # Подключаем проверку прав:
+    permission_classes = [IsModerator]
