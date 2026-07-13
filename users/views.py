@@ -9,6 +9,22 @@ from .utils import save_confirmation_code  # Импортируем утилит
 from .utils import get_confirmation_code, delete_confirmation_code
 
 
+from users.tasks import send_welcome_email, delete_old_temporary_data
+
+class RegisterView(APIView):
+    def post(self, request):
+        # ... код создания пользователя ...
+        user_email = "user@example.com"
+        username = "Ivan"
+        
+        # 1. Запуск задачи SMTP через .delay()
+        send_welcome_email.delay(user_email, username)
+        
+        # 2. Пример ручного вызова первой задачи очистки
+        delete_old_temporary_data.delay()
+        
+        return Response({"message": "Вы успешно зарегистрированы!"})
+
 
 User = get_user_model()
 

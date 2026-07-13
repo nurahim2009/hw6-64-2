@@ -135,3 +135,14 @@ import os
 REDIS_HOST = os.getenv('REDIS_HOST', '127.0.0.1')
 REDIS_PORT = int(os.getenv('REDIS_PORT', 6379))
 REDIS_DB = int(os.getenv('REDIS_DB', 0))
+
+
+
+from celery.schedules import crontab
+
+CELERY_BEAT_SCHEDULE = {
+    'deactivate-users-every-night': {
+        'task': 'users.tasks.deactivate_inactive_users',  # Укажите правильный путь к задаче
+        'schedule': crontab(hour=3, minute=0),          # Запуск каждый день в 3:00 ночи
+    },
+}
